@@ -1,3 +1,18 @@
+greenDAO - SQLCipher handling (This is a modified version of GreenDao 1.3.8 that supports database encryption)
+========
+SQLCipher handling explanations
+-----------------------------------------------------
+- Replaced every android.database.sqlite by net.sqlcipher.database (Both in DaoCore and DaoGenerator, even in non-java files)
+- Added sqlcipher.jar (not maven-ised or gradle-ised yet)
+- Modified build.gradle in DaoCore, DaoGenerator and DaoTest to integrate sqlcipher and its dependencies (don't forget to change java.srcDirs = ['src','src-gen']) into java.srcDirs = java.srcDirs + ['src','src-gen'])
+- Added assets/icudt46l.zip and src/main/jniLibs NDK/JNI dependencies
+- Refactored DaoTest (All the tests are green with encryption YEAAAAHHHH!!!!)
+
+If you want an example on how to integrate this on your project, watch the DaoTest project (because DaoTest will run as your Client Project).
+DaoGenerator doesn't have any dependencies to sqlcipher because it only generates lines of code.
+
+Modified by olivierg13
+
 greenDAO
 ========
 greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases. Being highly optimized for Android, greenDAO offers great performance and consumes minimal memory.

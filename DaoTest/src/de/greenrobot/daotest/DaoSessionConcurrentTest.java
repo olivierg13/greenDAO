@@ -2,8 +2,8 @@ package de.greenrobot.daotest;
 
 import java.util.concurrent.CountDownLatch;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteStatement;
 import android.os.SystemClock;
 import de.greenrobot.dao.DaoLog;
 import de.greenrobot.dao.query.DeleteQuery;
