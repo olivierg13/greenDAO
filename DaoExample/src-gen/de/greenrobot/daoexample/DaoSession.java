@@ -1,6 +1,6 @@
 package de.greenrobot.daoexample;
 
-import android.database.sqlite.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase;
 
 import java.util.Map;
 
