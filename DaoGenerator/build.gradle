@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 group = 'de.greenrobot'
 archivesBaseName = 'greendao-generator'
-version = '2.0.0'
+version = '2.0.0-SQLCIPHER'
 sourceCompatibility = 1.6
 
 def isSnapshot = version.endsWith('-SNAPSHOT')
@@ -84,68 +84,21 @@ artifacts {
 
 signing {
     if(project.hasProperty('signing.keyId') && project.hasProperty('signing.password') &&
-    project.hasProperty('signing.secretKeyRingFile')) {
+            project.hasProperty('signing.secretKeyRingFile')) {
         sign configurations.archives
     } else {
         println "Signing information missing/incomplete for ${project.name}"
     }
 }
 
+apply plugin: 'maven'
 uploadArchives {
     repositories {
         mavenDeployer {
-            if(project.hasProperty('preferedRepo') && project.hasProperty('preferedUsername') 
-                && project.hasProperty('preferedPassword')) {
-                configuration = configurations.deployerJars
-                repository(url: preferedRepo) {
-                    authentication(userName: preferedUsername, password: preferedPassword)
-                }
-            } else if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-                repository(url: sonatypeRepositoryUrl) {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-            } else {
-                println "Settings sonatypeUsername/sonatypePassword missing/incomplete for ${project.name}"
-            }
-
-            pom.project {
-               name 'greenDAO Generator'
-               packaging 'jar'
-               description 'Code generator for greenDAO, the light and fast ORM for Android'
-               url 'http://greendao-orm.com'
-
-               scm {
-                   url 'https://github.com/greenrobot/greenDAO'
-                   connection 'scm:git@github.com:greenrobot/greenDAO.git'
-                   developerConnection 'scm:git@github.com:greenrobot/greenDAO.git'
-               }
-
-               licenses {
-                   license {
-                       name 'GNU General Public License, Version 3'
-                       url 'http://www.gnu.org/licenses/gpl.txt'
-                       distribution 'repo'
-                   }
-               }
-
-               developers {
-                   developer {
-                       id 'greenrobot'
-                       name 'greenrobot'
-                   }
-               }
-               
-               issueManagement {
-                   system 'GitHub Issues'
-                   url 'https://github.com/greenrobot/greenDAO/issues'
-               }
-               
-               organization {
-                   name 'greenrobot'
-                   url 'http://greenrobot.de'
-               }
-           }
+            repository(url: uri("../../omada-nexus/release"))
+            pom.groupId = 'de.greenrobot'
+            pom.artifactId = 'greendao'
+            pom.version = '2.0.0-SQLCIPHER'
         }
     }
 }

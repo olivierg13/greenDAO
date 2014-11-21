@@ -1,6 +1,7 @@
 package de.greenrobot.daotest;
 
-import net.sqlcipher.Cursor;
+import android.database.Cursor;
+
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 
@@ -35,7 +36,7 @@ public class CustomTypeEntityDao extends AbstractDao<CustomTypeEntity, Long> {
     public CustomTypeEntityDao(DaoConfig config) {
         super(config);
     }
-    
+
     public CustomTypeEntityDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
     }
