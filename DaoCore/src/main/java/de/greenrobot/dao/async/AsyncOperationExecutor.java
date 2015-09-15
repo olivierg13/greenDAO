@@ -15,7 +15,7 @@
  */
 package de.greenrobot.dao.async;
 
-import android.database.sqlite.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;

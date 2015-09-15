@@ -19,7 +19,7 @@ package de.greenrobot.dao.test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import android.database.sqlite.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.AbstractDaoSession;
 
@@ -51,6 +51,7 @@ public abstract class AbstractDaoSessionTest<T extends AbstractDaoMaster, S exte
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
         try {
             Constructor<T> constructor = daoMasterClass.getConstructor(SQLiteDatabase.class);
             daoMaster = constructor.newInstance(db);

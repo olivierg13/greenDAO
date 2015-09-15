@@ -18,7 +18,7 @@ package de.greenrobot.dao.test;
 
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.SQLException;
+import net.sqlcipher.database.SQLiteConstraintException;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.SqlUtils;
@@ -99,7 +99,7 @@ public abstract class AbstractDaoTestSinglePk<D extends AbstractDao<T, K>, T, K>
         try {
             dao.insert(entity);
             fail("Inserting twice should not work");
-        } catch (SQLException expected) {
+        } catch (SQLiteConstraintException expected) {
             // OK
         }
     }

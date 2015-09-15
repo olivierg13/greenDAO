@@ -18,7 +18,7 @@ package de.greenrobot.dao.test;
 
 import java.lang.reflect.Method;
 
-import android.database.sqlite.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.DaoLog;
 import de.greenrobot.dao.InternalUnitTestDaoAccess;

@@ -1,22 +1,32 @@
 package de.greenrobot.daotest;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+
+import net.sqlcipher.database.SQLiteDatabase;
+
+import java.io.File;
+import java.lang.reflect.Method;
+
 import de.greenrobot.dao.DaoLog;
 import de.greenrobot.dao.query.Query;
-
-import java.lang.reflect.Method;
+import de.greenrobot.dao.test.DbTest;
 
 public class DaoSessionConcurrentWALTest extends DaoSessionConcurrentTest {
 
     @Override
     protected SQLiteDatabase createDatabase() {
         int MODE_ENABLE_WRITE_AHEAD_LOGGING = 8;
-        getContext().deleteDatabase(DB_NAME);
-        return getContext().openOrCreateDatabase(DB_NAME, MODE_ENABLE_WRITE_AHEAD_LOGGING, null);
+        if (DbTest.inMemory) {
+            return SQLiteDatabase.create(null, "key");
+        } else {
+            getContext().deleteDatabase(DB_NAME);
+            File databaseFile = getContext().getDatabasePath("demo.db");
+            return SQLiteDatabase.openOrCreateDatabase(databaseFile, "key", null);
+        }
     }
 
-    public void testConcurrentLockAndQueryDuringTxWAL() throws InterruptedException {
+    //Don't have this method on sqlcipher
+    /*public void testConcurrentLockAndQueryDuringTxWAL() throws InterruptedException {
         if (Build.VERSION.SDK_INT >= 16) {
             try {
                 Method method = db.getClass().getMethod("isWriteAheadLoggingEnabled");
@@ -56,5 +66,5 @@ public class DaoSessionConcurrentWALTest extends DaoSessionConcurrentTest {
             }
         });
         latchThreadsDone.await();
-    }
+    }*/
 }

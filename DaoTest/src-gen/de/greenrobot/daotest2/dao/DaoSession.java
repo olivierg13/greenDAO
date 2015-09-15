@@ -1,6 +1,6 @@
 package de.greenrobot.daotest2.dao;
 
-import android.database.sqlite.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabase;
 
 import java.util.Map;
 

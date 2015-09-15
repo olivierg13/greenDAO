@@ -16,17 +16,19 @@
 
 package de.greenrobot.dao;
 
+import android.database.CrossProcessCursor;
+import android.database.Cursor;
+import android.database.CursorWindow;
+
+import net.sqlcipher.DatabaseUtils;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteStatement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import android.database.CrossProcessCursor;
-import android.database.Cursor;
-import android.database.CursorWindow;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.identityscope.IdentityScope;
 import de.greenrobot.dao.identityscope.IdentityScopeLong;
 import de.greenrobot.dao.internal.DaoConfig;
@@ -37,15 +39,12 @@ import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Base class for all DAOs: Implements entity operations like insert, load, delete, and query.
- *
+ * <p/>
  * This class is thread-safe.
  *
+ * @param <T> Entity type
+ * @param <K> Primary key (PK) type; use Void if entity does not have exactly one PK
  * @author Markus
- *
- * @param <T>
- *            Entity type
- * @param <K>
- *            Primary key (PK) type; use Void if entity does not have exactly one PK
  */
 /*
  * When operating on TX, statements, or identity scope the following locking order must be met to avoid deadlocks:
@@ -118,8 +117,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Loads and entity for the given PK.
      *
-     * @param key
-     *            a PK value or null
+     * @param key a PK value or null
      * @return The entity or null, if no entity matched the PK value
      */
     public T load(K key) {
@@ -134,13 +132,13 @@ public abstract class AbstractDao<T, K> {
             }
         }
         String sql = statements.getSelectByKey();
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = new String[]{key.toString()};
         Cursor cursor = db.rawQuery(sql, keyArray);
         return loadUniqueAndCloseCursor(cursor);
     }
 
     public T loadByRowId(long rowId) {
-        String[] idArray = new String[] { Long.toString(rowId) };
+        String[] idArray = new String[]{Long.toString(rowId)};
         Cursor cursor = db.rawQuery(statements.getSelectByRowId(), idArray);
         return loadUniqueAndCloseCursor(cursor);
     }
@@ -163,13 +161,17 @@ public abstract class AbstractDao<T, K> {
         return loadCurrent(cursor, 0, true);
     }
 
-    /** Loads all available entities from the database. */
+    /**
+     * Loads all available entities from the database.
+     */
     public List<T> loadAll() {
         Cursor cursor = db.rawQuery(statements.getSelectAll(), null);
         return loadAllAndCloseCursor(cursor);
     }
 
-    /** Detaches an entity from the identity scope (session). Subsequent query results won't return this object. */
+    /**
+     * Detaches an entity from the identity scope (session). Subsequent query results won't return this object.
+     */
     public boolean detach(T entity) {
         if (identityScope != null) {
             K key = getKeyVerified(entity);
@@ -190,8 +192,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Inserts the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to insert.
+     * @param entities The entities to insert.
      */
     public void insertInTx(Iterable<T> entities) {
         insertInTx(entities, isEntityUpdateable());
@@ -200,8 +201,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Inserts the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to insert.
+     * @param entities The entities to insert.
      */
     public void insertInTx(T... entities) {
         insertInTx(Arrays.asList(entities), isEntityUpdateable());
@@ -211,10 +211,8 @@ public abstract class AbstractDao<T, K> {
      * Inserts the given entities in the database using a transaction. The given entities will become tracked if the PK
      * is set.
      *
-     * @param entities
-     *            The entities to insert.
-     * @param setPrimaryKey
-     *            if true, the PKs of the given will be set after the insert; pass false to improve performance.
+     * @param entities      The entities to insert.
+     * @param setPrimaryKey if true, the PKs of the given will be set after the insert; pass false to improve performance.
      */
     public void insertInTx(Iterable<T> entities, boolean setPrimaryKey) {
         SQLiteStatement stmt = statements.getInsertStatement();
@@ -225,10 +223,8 @@ public abstract class AbstractDao<T, K> {
      * Inserts or replaces the given entities in the database using a transaction. The given entities will become
      * tracked if the PK is set.
      *
-     * @param entities
-     *            The entities to insert.
-     * @param setPrimaryKey
-     *            if true, the PKs of the given will be set after the insert; pass false to improve performance.
+     * @param entities      The entities to insert.
+     * @param setPrimaryKey if true, the PKs of the given will be set after the insert; pass false to improve performance.
      */
     public void insertOrReplaceInTx(Iterable<T> entities, boolean setPrimaryKey) {
         SQLiteStatement stmt = statements.getInsertOrReplaceStatement();
@@ -238,8 +234,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Inserts or replaces the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to insert.
+     * @param entities The entities to insert.
      */
     public void insertOrReplaceInTx(Iterable<T> entities) {
         insertOrReplaceInTx(entities, isEntityUpdateable());
@@ -248,8 +243,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Inserts or replaces the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to insert.
+     * @param entities The entities to insert.
      */
     public void insertOrReplaceInTx(T... entities) {
         insertOrReplaceInTx(Arrays.asList(entities), isEntityUpdateable());
@@ -366,7 +360,9 @@ public abstract class AbstractDao<T, K> {
         }
     }
 
-    /** Reads all available rows from the given cursor and returns a list of entities. */
+    /**
+     * Reads all available rows from the given cursor and returns a list of entities.
+     */
     protected List<T> loadAllFromCursor(Cursor cursor) {
         int count = cursor.getCount();
         List<T> list = new ArrayList<T>(count);
@@ -399,7 +395,9 @@ public abstract class AbstractDao<T, K> {
         return list;
     }
 
-    /** Internal use only. Considers identity scope. */
+    /**
+     * Internal use only. Considers identity scope.
+     */
     final protected T loadCurrent(Cursor cursor, int offset, boolean lock) {
         if (identityScopeLong != null) {
             if (offset != 0) {
@@ -452,12 +450,16 @@ public abstract class AbstractDao<T, K> {
         }
     }
 
-    /** Internal use only. Considers identity scope. */
+    /**
+     * Internal use only. Considers identity scope.
+     */
     final protected <O> O loadCurrentOther(AbstractDao<O, ?> dao, Cursor cursor, int offset) {
         return dao.loadCurrent(cursor, offset, /* TODO check this */true);
     }
 
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    /**
+     * A raw-style query where you can pass any WHERE clause and arguments.
+     */
     public List<T> queryRaw(String where, String... selectionArg) {
         Cursor cursor = db.rawQuery(statements.getSelectAll() + where, selectionArg);
         return loadAllAndCloseCursor(cursor);
@@ -490,14 +492,18 @@ public abstract class AbstractDao<T, K> {
         }
     }
 
-    /** Deletes the given entity from the database. Currently, only single value PK entities are supported. */
+    /**
+     * Deletes the given entity from the database. Currently, only single value PK entities are supported.
+     */
     public void delete(T entity) {
         assertSinglePk();
         K key = getKeyVerified(entity);
         deleteByKey(key);
     }
 
-    /** Deletes an entity with the given PK from the database. Currently, only single value PK entities are supported. */
+    /**
+     * Deletes an entity with the given PK from the database. Currently, only single value PK entities are supported.
+     */
     public void deleteByKey(K key) {
         assertSinglePk();
         SQLiteStatement stmt = statements.getDeleteStatement();
@@ -580,8 +586,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Deletes the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to delete.
+     * @param entities The entities to delete.
      */
     public void deleteInTx(Iterable<T> entities) {
         deleteInTxInternal(entities, null);
@@ -590,8 +595,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Deletes the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to delete.
+     * @param entities The entities to delete.
      */
     public void deleteInTx(T... entities) {
         deleteInTxInternal(Arrays.asList(entities), null);
@@ -600,8 +604,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Deletes all entities with the given keys in the database using a transaction.
      *
-     * @param keys
-     *            Keys of the entities to delete.
+     * @param keys Keys of the entities to delete.
      */
     public void deleteByKeyInTx(Iterable<K> keys) {
         deleteInTxInternal(null, keys);
@@ -610,19 +613,20 @@ public abstract class AbstractDao<T, K> {
     /**
      * Deletes all entities with the given keys in the database using a transaction.
      *
-     * @param keys
-     *            Keys of the entities to delete.
+     * @param keys Keys of the entities to delete.
      */
     public void deleteByKeyInTx(K... keys) {
         deleteInTxInternal(null, Arrays.asList(keys));
     }
 
-    /** Resets all locally changed properties of the entity by reloading the values from the database. */
+    /**
+     * Resets all locally changed properties of the entity by reloading the values from the database.
+     */
     public void refresh(T entity) {
         assertSinglePk();
         K key = getKeyVerified(entity);
         String sql = statements.getSelectByKey();
-        String[] keyArray = new String[] { key.toString() };
+        String[] keyArray = new String[]{key.toString()};
         Cursor cursor = db.rawQuery(sql, keyArray);
         try {
             boolean available = cursor.moveToFirst();
@@ -683,11 +687,9 @@ public abstract class AbstractDao<T, K> {
     /**
      * Attaches the entity to the identity scope. Calls attachEntity(T entity).
      *
-     * @param key
-     *            Needed only for identity scope, pass null if there's none.
-     * @param entity
-     *            The entitiy to attach
-     * */
+     * @param key    Needed only for identity scope, pass null if there's none.
+     * @param entity The entitiy to attach
+     */
     protected final void attachEntity(K key, T entity, boolean lock) {
         attachEntity(entity);
         if (identityScope != null && key != null) {
@@ -703,17 +705,15 @@ public abstract class AbstractDao<T, K> {
      * Sub classes with relations additionally set the DaoMaster here. Must be called before the entity is attached to
      * the identity scope.
      *
-     * @param entity
-     *            The entitiy to attach
-     * */
+     * @param entity The entitiy to attach
+     */
     protected void attachEntity(T entity) {
     }
 
     /**
      * Updates the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to insert.
+     * @param entities The entities to insert.
      */
     public void updateInTx(Iterable<T> entities) {
         SQLiteStatement stmt = statements.getUpdateStatement();
@@ -754,8 +754,7 @@ public abstract class AbstractDao<T, K> {
     /**
      * Updates the given entities in the database using a transaction.
      *
-     * @param entities
-     *            The entities to update.
+     * @param entities The entities to update.
      */
     public void updateInTx(T... entities) {
         updateInTx(Arrays.asList(entities));
@@ -771,7 +770,9 @@ public abstract class AbstractDao<T, K> {
         return DatabaseUtils.queryNumEntries(db, '\'' + config.tablename + '\'');
     }
 
-    /** See {@link #getKey(Object)}, but guarantees that the returned key is never null (throws if null). */
+    /**
+     * See {@link #getKey(Object)}, but guarantees that the returned key is never null (throws if null).
+     */
     protected K getKeyVerified(T entity) {
         K key = getKey(entity);
         if (key == null) {
@@ -785,21 +786,31 @@ public abstract class AbstractDao<T, K> {
         }
     }
 
-    /** Gets the SQLiteDatabase for custom database access. Not needed for greenDAO entities. */
+    /**
+     * Gets the SQLiteDatabase for custom database access. Not needed for greenDAO entities.
+     */
     public SQLiteDatabase getDatabase() {
         return db;
     }
 
-    /** Reads the values from the current position of the given cursor and returns a new entity. */
+    /**
+     * Reads the values from the current position of the given cursor and returns a new entity.
+     */
     abstract protected T readEntity(Cursor cursor, int offset);
 
-    /** Reads the key from the current position of the given cursor, or returns null if there's no single-value key. */
+    /**
+     * Reads the key from the current position of the given cursor, or returns null if there's no single-value key.
+     */
     abstract protected K readKey(Cursor cursor, int offset);
 
-    /** Reads the values from the current position of the given cursor into an existing entity. */
+    /**
+     * Reads the values from the current position of the given cursor into an existing entity.
+     */
     abstract protected void readEntity(Cursor cursor, T entity, int offset);
 
-    /** Binds the entity's values to the statement. Make sure to synchronize the statement outside of the method. */
+    /**
+     * Binds the entity's values to the statement. Make sure to synchronize the statement outside of the method.
+     */
     abstract protected void bindValues(SQLiteStatement stmt, T entity);
 
     /**
@@ -814,7 +825,9 @@ public abstract class AbstractDao<T, K> {
      */
     abstract protected K getKey(T entity);
 
-    /** Returns true if the Entity class can be updated, e.g. for setting the PK after insert. */
+    /**
+     * Returns true if the Entity class can be updated, e.g. for setting the PK after insert.
+     */
     abstract protected boolean isEntityUpdateable();
 
 }
