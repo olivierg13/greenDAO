@@ -97,7 +97,7 @@ uploadArchives {
         mavenDeployer {
             repository(url: uri("../../omada-nexus/release"))
             pom.groupId = 'de.greenrobot'
-            pom.artifactId = 'greendao'
+            pom.artifactId = 'greendao-generator'
             pom.version = '2.0.0-SQLCIPHER'
         }
     }
