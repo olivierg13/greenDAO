@@ -3,7 +3,8 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'de.greenrobot'
-version = '1.3.8-SQLCIPHER'
+archivesBaseName = 'greendao'
+version = '2.1.0-SNAPSHOT'
 sourceCompatibility = 1.6
 
 def isSnapshot = version.endsWith('-SNAPSHOT')
@@ -50,6 +51,7 @@ sourceSets {
 }
 
 javadoc {
+    failOnError = false
     classpath += configurations.provided
     title = " greenDAO ${version} API"
 	options.bottom = 'Available under the Apache License, Version 2.0 - <i>Copyright &#169; 2011-2013 <a href="http://greenrobot.de/">greenrobot.de</a>. All Rights Reserved.</i>'
