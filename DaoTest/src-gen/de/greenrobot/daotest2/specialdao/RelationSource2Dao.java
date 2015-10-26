@@ -2,7 +2,7 @@ package de.greenrobot.daotest2.specialdao;
 
 import java.util.List;
 import java.util.ArrayList;
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 

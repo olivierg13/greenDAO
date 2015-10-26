@@ -15,6 +15,8 @@
  */
 package de.greenrobot.dao.query;
 
+import net.sqlcipher.Cursor;
+
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +26,6 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.ReentrantLock;
 
-import android.database.Cursor;
 import de.greenrobot.dao.DaoException;
 import de.greenrobot.dao.InternalQueryDaoAccess;
 

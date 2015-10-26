@@ -16,10 +16,11 @@
 
 package de.greenrobot.dao;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sqlcipher.database.SQLiteDatabase;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 

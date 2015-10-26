@@ -16,17 +16,17 @@
 
 package de.greenrobot.dao;
 
+import net.sqlcipher.Cursor;
+import net.sqlcipher.CursorWindow;
+import net.sqlcipher.DatabaseUtils;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteStatement;
+
+import android.database.CrossProcessCursor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import android.database.CrossProcessCursor;
-import android.database.Cursor;
-import android.database.CursorWindow;
-import net.sqlcipher.DatabaseUtils;
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteStatement;
 import de.greenrobot.dao.identityscope.IdentityScope;
 import de.greenrobot.dao.identityscope.IdentityScopeLong;
 import de.greenrobot.dao.internal.DaoConfig;
@@ -370,17 +370,6 @@ public abstract class AbstractDao<T, K> {
     protected List<T> loadAllFromCursor(Cursor cursor) {
         int count = cursor.getCount();
         List<T> list = new ArrayList<T>(count);
-        if (cursor instanceof CrossProcessCursor) {
-            CursorWindow window = ((CrossProcessCursor) cursor).getWindow();
-            if (window != null) { // E.g. Roboelectric has no Window at this point
-                if (window.getNumRows() == count) {
-                    cursor = new FastCursor(window);
-                } else {
-                    DaoLog.d("Window vs. result size: " + window.getNumRows() + "/" + count);
-                }
-            }
-        }
-
         if (cursor.moveToFirst()) {
             if (identityScope != null) {
                 identityScope.lock();

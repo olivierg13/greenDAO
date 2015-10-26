@@ -1,8 +1,9 @@
 package de.greenrobot.dao;
 
+import net.sqlcipher.Cursor;
+
 import java.util.List;
 
-import android.database.Cursor;
 import de.greenrobot.dao.internal.TableStatements;
 
 /** For internal use by greenDAO only. */

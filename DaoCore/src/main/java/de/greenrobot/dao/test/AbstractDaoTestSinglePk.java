@@ -16,8 +16,8 @@
 
 package de.greenrobot.dao.test;
 
-import android.database.Cursor;
-import android.database.DatabaseUtils;
+import net.sqlcipher.Cursor;
+import net.sqlcipher.DatabaseUtils;
 import net.sqlcipher.database.SQLiteConstraintException;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;

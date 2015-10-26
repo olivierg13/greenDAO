@@ -1,6 +1,6 @@
 package de.greenrobot.daotest;
 
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 
