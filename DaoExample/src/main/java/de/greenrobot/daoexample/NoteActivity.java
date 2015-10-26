@@ -19,7 +19,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import android.app.ListActivity;
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;

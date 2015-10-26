@@ -15,11 +15,11 @@
  */
 package de.greenrobot.dao.query;
 
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import de.greenrobot.dao.AbstractDao;
 
 /**
- * A repeatable query returning a raw android.database.Cursor. Note, that using cursors is usually a hassle and
+ * A repeatable query returning a raw net.sqlcipher.Cursor. Note, that using cursors is usually a hassle and
  * greenDAO provides a higher level abstraction using entities (see {@link de.greenrobot.dao.query.Query}). This class
  * can nevertheless be useful to work with legacy code that is based on Cursors or CursorLoaders.
  *
@@ -68,7 +68,7 @@ public class CursorQuery<T> extends AbstractQueryWithLimit<T> {
         return queryData.forCurrentThread(this);
     }
 
-    /** Executes the query and returns a raw android.database.Cursor. Don't forget to close it. */
+    /** Executes the query and returns a raw net.sqlcipher.Cursor. Don't forget to close it. */
     public Cursor query() {
         checkThread();
         return dao.getDatabase().rawQuery(sql, parameters);

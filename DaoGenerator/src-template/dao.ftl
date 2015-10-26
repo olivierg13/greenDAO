@@ -27,7 +27,7 @@ import java.util.List;
 <#if entity.toOneRelations?has_content>
 import java.util.ArrayList;
 </#if>
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 

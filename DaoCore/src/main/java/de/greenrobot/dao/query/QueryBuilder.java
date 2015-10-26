@@ -247,7 +247,7 @@ public class QueryBuilder<T> {
     }
 
     /**
-     * Builds a reusable query object for low level android.database.Cursor access.
+     * Builds a reusable query object for low level net.sqlcipher.Cursor access.
      * (Query objects can be executed more efficiently than creating a QueryBuilder for each execution.
      */
     public CursorQuery buildCursor() {

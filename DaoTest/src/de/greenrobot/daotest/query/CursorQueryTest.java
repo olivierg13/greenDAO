@@ -17,7 +17,7 @@
  */
 package de.greenrobot.daotest.query;
 
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import de.greenrobot.dao.query.CursorQuery;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.daotest.TestEntityDao.Properties;

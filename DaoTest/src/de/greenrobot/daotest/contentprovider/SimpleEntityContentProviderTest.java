@@ -17,7 +17,7 @@
  */
 package de.greenrobot.daotest.contentprovider;
 
-import android.database.Cursor;
+import net.sqlcipher.Cursor;
 import android.test.suitebuilder.annotation.Suppress;
 
 import de.greenrobot.dao.test.AbstractDaoSessionTest;
