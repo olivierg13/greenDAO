@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Markus Junginger, greenrobot (http://greenrobot.de)
+ * Copyright (C) 2011-2016 Markus Junginger, greenrobot (http://greenrobot.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ public class TableStatements {
     private final String[] allColumns;
     private final String[] pkColumns;
 
-    private SQLiteStatement insertStatement;
-    private SQLiteStatement insertOrReplaceStatement;
-    private SQLiteStatement updateStatement;
-    private SQLiteStatement deleteStatement;
+    private volatile SQLiteStatement insertStatement;
+    private volatile SQLiteStatement insertOrReplaceStatement;
+    private volatile SQLiteStatement updateStatement;
+    private volatile SQLiteStatement deleteStatement;
 
     private volatile String selectAll;
     private volatile String selectByKey;
@@ -44,32 +44,48 @@ public class TableStatements {
 
     public SQLiteStatement getInsertStatement() {
         if (insertStatement == null) {
-            String sql = SqlUtils.createSqlInsert("INSERT INTO ", tablename, allColumns);
-            insertStatement = db.compileStatement(sql);
+            synchronized (this) {
+                if (insertStatement == null) {
+                    String sql = SqlUtils.createSqlInsert("INSERT INTO ", tablename, allColumns);
+                    insertStatement = db.compileStatement(sql);
+                }
+            }
         }
         return insertStatement;
     }
 
     public SQLiteStatement getInsertOrReplaceStatement() {
         if (insertOrReplaceStatement == null) {
-            String sql = SqlUtils.createSqlInsert("INSERT OR REPLACE INTO ", tablename, allColumns);
-            insertOrReplaceStatement = db.compileStatement(sql);
+            synchronized (this) {
+                if (insertOrReplaceStatement == null) {
+                    String sql = SqlUtils.createSqlInsert("INSERT OR REPLACE INTO ", tablename, allColumns);
+                    insertOrReplaceStatement = db.compileStatement(sql);
+                }
+            }
         }
         return insertOrReplaceStatement;
     }
 
     public SQLiteStatement getDeleteStatement() {
         if (deleteStatement == null) {
-            String sql = SqlUtils.createSqlDelete(tablename, pkColumns);
-            deleteStatement = db.compileStatement(sql);
+            synchronized (this) {
+                if (deleteStatement == null) {
+                    String sql = SqlUtils.createSqlDelete(tablename, pkColumns);
+                    deleteStatement = db.compileStatement(sql);
+                }
+            }
         }
         return deleteStatement;
     }
 
     public SQLiteStatement getUpdateStatement() {
         if (updateStatement == null) {
-            String sql = SqlUtils.createSqlUpdate(tablename, allColumns, pkColumns);
-            updateStatement = db.compileStatement(sql);
+            synchronized (this) {
+                if (updateStatement == null) {
+                    String sql = SqlUtils.createSqlUpdate(tablename, allColumns, pkColumns);
+                    updateStatement = db.compileStatement(sql);
+                }
+            }
         }
         return updateStatement;
     }
@@ -77,7 +93,7 @@ public class TableStatements {
     /** ends with an space to simplify appending to this string. */
     public String getSelectAll() {
         if (selectAll == null) {
-            selectAll = SqlUtils.createSqlSelect(tablename, "T", allColumns);
+            selectAll = SqlUtils.createSqlSelect(tablename, "T", allColumns, false);
         }
         return selectAll;
     }
@@ -85,7 +101,7 @@ public class TableStatements {
     /** ends with an space to simplify appending to this string. */
     public String getSelectKeys() {
         if (selectKeys == null) {
-            selectKeys = SqlUtils.createSqlSelect(tablename, "T", pkColumns);
+            selectKeys = SqlUtils.createSqlSelect(tablename, "T", pkColumns, false);
         }
         return selectKeys;
     }

@@ -1,11 +1,19 @@
 Release History
 ---------------
-### V2.1.0 Minor feature release (2015-09-XX, both core and generator)
+### V2.2.0 Minor feature and bugfix release (2016-??-??))
+* Attention: artifact group changed to 'org.greenrobot' (Java package starting with 'de' remains, no breaking changes)
+* Query.setParameter returns the query to allow a more fluent API
+* New DAO method detachAll to detach all entities of a specific type
+* Using Gradle 2.12's compileOnly dependencies fixed errors with Android Studio (only relevant if you want to work on the greenDAO source)
+
+### V2.1.0 Minor feature and bugfix release (2015-11-12, both core and generator)
 * Official Robolectric support: workaround for a broken system call in Robolectric triggered by Query.forCurrentThread
+* QueryBuilder now allows to create DISTINCT queries to avoid duplicate entities returned
 * CursorQuery (beta, API might change)
+* Deadlock prevention when loading a list of entities while doing concurrent updates
 * Fixed async queries
 * Better Android Studio support
-* Added performance tests for: ActiveAndroid, Realm, Parse
+* Generator: Possibility to supply custom JavaDoc for entities and their properties
 * Generator: Fixed codeBeforeGetter, added codeBeforeGetterAndSetter
 
 ### V2.0.0 Major feature release (2015-07-30, both core and generator)

@@ -17,21 +17,21 @@ greenDAO
 ========
 greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases. Being highly optimized for Android, greenDAO offers great performance and consumes minimal memory.
 
-**<font size="+1">Home page, documentation, and support links: http://greendao-orm.com/</font>**
+**<font size="+1">Home page, documentation, and support links: http://greenrobot.org/greendao/</font>**
 
 [![Build Status](https://travis-ci.org/greenrobot/greenDAO.svg?branch=master)](https://travis-ci.org/greenrobot/greenDAO)
 
 Features
 --------
-greenDAO has a unique set of features:
+greenDAO's unique set of features:
 
 * Rock solid: greenDAO has been around since 2011 and is used by countless famous apps
 * Super simple: concise and straight-forward API
 * Small: The library is <100K and it's just plain Java jar (no CPU dependent native parts)
 * Fast: Probably the fastest ORM for Android, driven by intelligent code generation
 * Safe and expressive query API: QueryBuilder uses property constants to avoid typos
-* V2.0.0 Powerful joins: query across entities and even chain joins for complex relations
-* V2.0.0 Flexible property types: use custom classes or enums to represent data in your entity
+* Powerful joins: query across entities and even chain joins for complex relations
+* Flexible property types: use custom classes or enums to represent data in your entity
 
 
 Add greenDAO to your project
@@ -40,14 +40,27 @@ greenDAO is available on Maven Central. Please ensure that you are using the lat
 
 Gradle dependency for your Android app:
 ```
-    compile 'de.greenrobot:greendao:2.0.0'
+    compile 'de.greenrobot:greendao:2.1.0'
 ```
 
 Gradle dependency for your Java generator project:
 ```
-    compile 'de.greenrobot:greendao-generator:2.0.0'
+    compile 'de.greenrobot:greendao-generator:2.1.0'
 ```
 
+Homepage, Documentation, Links
+------------------------------
+For more details on greenDAO please check [greenDAO's website](http://greenrobot.org/greendao). Here are some direct links you may find useful:
+
+[Features](http://greenrobot.org/greendao/features/)
+
+[Documentation](http://greenrobot.org/greendao/documentation/)
+
+[Changelog](CHANGELOG.md)
+
+[Technical FAQ](http://greenrobot.org/greendao/documentation/technical-faq/)
+
+[Non-Technical FAQ](http://greenrobot.org/greendao/documentation/faq/)
 
 Features in Beta
 ----------------
