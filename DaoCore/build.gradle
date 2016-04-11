@@ -90,7 +90,7 @@ uploadArchives {
             repository(url: uri("../../omada-nexus/release"))
             pom.groupId = 'de.greenrobot'
             pom.artifactId = 'greendao'
-            pom.version = '2.1.0-SQLCIPHER-3.3.1-2'
+            pom.version = '2.1.0-SQLCIPHER-3.4.0'
         }
     }
 }

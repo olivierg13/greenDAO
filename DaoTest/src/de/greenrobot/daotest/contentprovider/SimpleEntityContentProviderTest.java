@@ -51,7 +51,7 @@ public class SimpleEntityContentProviderTest extends AbstractDaoSessionTest<DaoM
         entity2.setSimpleString("content");
         daoSession.insert(entity2);
         long id2 = entity2.getId();
-        Cursor cursor = getContext().getContentResolver().query(SimpleEntityContentProvider.CONTENT_URI, null,
+        Cursor cursor = (Cursor) getContext().getContentResolver().query(SimpleEntityContentProvider.CONTENT_URI, null,
                 null, null, "_id");
         assertEquals(2, cursor.getCount());
         int idxId = cursor.getColumnIndexOrThrow(SimpleEntityDao.Properties.Id.columnName);
