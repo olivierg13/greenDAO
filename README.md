@@ -1,4 +1,4 @@
-greenDAO - SQLCipher handling (This is a modified version of GreenDao 1.3.8 that supports database encryption)
+greenDAO - SQLCipher handling (This is a modified version of GreenDao 2.2.0 that supports database encryption)
 ========
 SQLCipher handling explanations
 -----------------------------------------------------
