@@ -25,9 +25,9 @@ configurations {
 
 dependencies {
     //sqlcipher dependencies
-    provided 'commons-codec:commons-codec:1.5'
-    provided group: 'com.google.guava', name: 'guava', version: '12.0'
-    provided files('libs/sqlcipher.jar')
+    compileOnly 'commons-codec:commons-codec:1.5'
+    compileOnly group: 'com.google.guava', name: 'guava', version: '12.0'
+    compileOnly files('libs/sqlcipher.jar')
 
     // Other dependencies
     compileOnly 'com.google.android:android:4.1.1.4'

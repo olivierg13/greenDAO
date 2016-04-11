@@ -16,17 +16,19 @@
 
 package de.greenrobot.dao;
 
+import android.database.CrossProcessCursor;
+
 import net.sqlcipher.Cursor;
 import net.sqlcipher.CursorWindow;
 import net.sqlcipher.DatabaseUtils;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 
-import android.database.CrossProcessCursor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
 import de.greenrobot.dao.identityscope.IdentityScope;
 import de.greenrobot.dao.identityscope.IdentityScopeLong;
 import de.greenrobot.dao.internal.DaoConfig;
@@ -378,7 +380,7 @@ public abstract class AbstractDao<T, K> {
         CursorWindow window = null;
         boolean useFastCursor = false;
         if (cursor instanceof CrossProcessCursor) {
-            window = ((CrossProcessCursor) cursor).getWindow();
+            window = (CursorWindow) ((CrossProcessCursor) cursor).getWindow();
             if (window != null) { // E.g. Robolectric has no Window at this point
                 if (window.getNumRows() == count) {
                     cursor = new FastCursor(window);
@@ -439,7 +441,7 @@ public abstract class AbstractDao<T, K> {
         identityScope.unlock();
         try {
             if (cursor.moveToNext()) {
-                return ((CrossProcessCursor) cursor).getWindow();
+                return (CursorWindow) ((CrossProcessCursor) cursor).getWindow();
             } else {
                 return null;
             }

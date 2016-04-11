@@ -18,11 +18,12 @@ package de.greenrobot.dao.internal;
 import android.content.ContentResolver;
 import android.database.CharArrayBuffer;
 import android.database.ContentObserver;
-import android.database.Cursor;
-import android.database.CursorWindow;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
+
+import net.sqlcipher.Cursor;
+import net.sqlcipher.CursorWindow;
 
 /** Internal class used by greenDAO. */
 final public class FastCursor implements Cursor {
