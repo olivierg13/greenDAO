@@ -4,8 +4,6 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compileOnly 'commons-codec:commons-codec:1.5'
-    compileOnly group: 'com.google.guava', name: 'guava', version: '12.0'
     compileOnly files('libs/sqlcipher.jar')
 
     compile project(':DaoCore')
