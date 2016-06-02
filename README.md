@@ -1,3 +1,6 @@
+OBSOLETE (use the native http://greenrobot.org/greendao/documentation/database-encryption/)
+========
+
 greenDAO - SQLCipher handling (This is a modified version of GreenDao 2.2.0 that supports database encryption)
 ========
 SQLCipher handling explanations
